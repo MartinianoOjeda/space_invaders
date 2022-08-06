@@ -3,8 +3,10 @@
 #include <conio.h>
 #include <stdbool.h>
 #include <windows.h>
+#include <time.h>
 
 #define ESC 27
+#define MAX_RANGE 10
 
 //PROTOTIPADO
 void hideCursor();
@@ -45,4 +47,14 @@ void print(int x, int y, int color, char c) {
     gotoXY(x, y);
     printf("%c", c);
     printf("%c[0m", ESC); //reestablece el color por defecto de la consola
+}
+
+int randomNumber() {
+    
+    int n = 0;
+    srand(time(NULL));
+    //srand((unsigned) time(&t));
+    n =  rand() % MAX_RANGE;
+    
+    return n + 1;
 }

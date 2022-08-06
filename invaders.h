@@ -3,13 +3,14 @@
 //INVADERS
 #define APPEARENCE 219
 #define INVADER_COLOR 31
+#define INVADER_COLOR_SPECIAL 29
 #define INVADER_PARTS 22
-#define INVADER_ARMY 8
+#define INVADER_ARMY 16
 
 typedef int x_directon[INVADER_PARTS];
 
 typedef struct i_body{
-    int x, y, previous_X, previous_y, life, bullets;
+    int x, y, previous_X, previous_y, life, bullets, color;
     char appearance;
     x_directon x_direction_part_invader;
 }invader;
@@ -18,13 +19,12 @@ typedef invader invader_army[INVADER_ARMY];
 
 //PROTOTIPADO INVADERS
 invader createInvader(int , int, invader);
-invader createInvaderArmy(int , int, invader);
-invader printInvaders(invader);
+void printInvaders(invader);
 
 invader createInvader(int x, int y, invader inv) {
       int d[INVADER_PARTS] = {4,5,2,3,4,5,6,7,0,1,2,3,4,5,6,7,8,9,0,1,8,9};
 
-      int i;
+      int i, n;
       for(i = 0; i < INVADER_PARTS; i ++) {
             inv.x_direction_part_invader[i] = d[i] + x;
       }
@@ -32,36 +32,34 @@ invader createInvader(int x, int y, invader inv) {
       inv.x = x;
       inv.y = y;
       inv.appearance = APPEARENCE;
-      inv.bullets = 5;
-      inv.life = 5;
+      
+
+      //existe una 20% de probabilidad de que se genere un invader especial
+      n = randomNumber();
+      if (n == 5 || n == 6) {
+            inv.bullets = 10;
+            inv.life = 10;
+            inv.color = INVADER_COLOR_SPECIAL;
+      }
+      else {
+            inv.bullets = 5;
+            inv.life = 5;
+            inv.color = INVADER_COLOR;
+      }
 
       return inv;
 }
 
-invader createInvaderArmy(int x, int y, invader inv) {
-      invader_army ia;
-      int i, j;
-      for(i = 0; i < INVADER_ARMY; i ++) {
-            inv.x = x;
-            ia[i] = inv;
-      }
-
-}
-
-invader printInvaders(invader inv) {
-
+void printInvaders(invader inv) {
       int i;
-      int iy = 0;
-      int n = 0;
+      int x = 0;
+      int y = inv.y;
 
-      for(i = 0; i < 22; i ++) {
-            if(inv.x_direction_part_invader[i] < n) {
-                  iy += 1;
+      for(i = 0; i < INVADER_PARTS; i++) {
+            if(inv.x_direction_part_invader[i] < x) {
+                  y += 1;
             }
-            print(inv.x_direction_part_invader[i], iy + inv.x, INVADER_COLOR, APPEARENCE);
-            
-            n = inv.x_direction_part_invader[i];
+            x = inv.x_direction_part_invader[i];
+            print(x, y, inv.color, inv.appearance);
       }
-
-      return inv;
 }
