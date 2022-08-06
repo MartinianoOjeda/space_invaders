@@ -5,7 +5,8 @@ int main() {
     invader i; 
     system("cls");
 
-    printInvader(i);
+    i = createInvader(5, 5, i);
+    printInvaders(i);
 
     printf("\n\n");
     system("pause");
